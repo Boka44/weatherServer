@@ -7,27 +7,64 @@ router.use(bodyParser,urlencoded({ extended: true }));
 
 var Location = require('./location');
 
+/** 
+Object where I store the latitude and longitude for each city
+**/
 
-const areas = ['san fran', 'los angeles', 'portland', 'seattle'];
+const areas = {
+	'san fran': {
+		'lat': ,
+		'long': 
+	}, 
+	'los angeles': {
+		'lat': ,
+		'long': 
+	}, 
+	'portland': {
+		'lat': ,
+		'long': 
+	}, 
+	'seattle': {
+		'lat': ,
+		'long': 
+	}
+}
+
+/** 
+Updates the API every 30 minutes by calling the Dark Sky API and
+storing it in the database.
+
+Probably use a for loop and use the areas as an array.
+
+@params {string} area - passes the city data.
+
+**/
 
 updateWeatherStore(areas){
-//For each area this should call the getLatLong() method and make the call to api
 
-//Here is where we will set up an API call every 30 minutes for each city
-router.get('/');
 
-//This will update each city with the appropriate data.
-router.put('/');
+	/**
+	Here is where we will set up an API call every 30 minutes for each city
 
+	@return {object} data - returns the Dark Sky API data
+	**/
+	getWeatherData(){
+		router.get('/');
+	}
+	/**
+	This will update each city in teh database with the appropriate weather data.
+
+	@params {object} data- passes the Dark Sy API data 
+	**/
+	updateDB(data) {
+		router.put('/');
+	}
 }
 
-getLatLong(area){
-// this should use google api to get the latitude and longitutde for the city hall / center of city for use in 
-// which is returned to updateWeatherStore()
-}
 
-
-//This will process each client request and send the appropriate data to the client.
+/**
+This will process each client request and send the appropriate data to the client.
+**/
 router.post('/');
 
 
