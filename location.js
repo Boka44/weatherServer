@@ -10,7 +10,7 @@ var LocationSchema = new mongoose.Schema({
 	**/
 
 	location: String,
-	data: Object
+	data: String
 });
 mongoose.model('Location', LocationSchema);
 
