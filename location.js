@@ -1,6 +1,6 @@
 //location.js
 var mongoose = require('mongoose');
-var LocationSchema = new mongoose.Schema({
+var citySchema = new mongoose.Schema({
 	/**
 	Here is where the locations will go. I'll create an value for each city
 	in which the data will be stored and updated every 30 minutes.
@@ -9,9 +9,10 @@ var LocationSchema = new mongoose.Schema({
 		will be stored here and updated every 30 minutes.
 	**/
 
-	location: String,
-	data: String
+	city: String,
+	data: Object,
+	test: Number
 });
-mongoose.model('Location', LocationSchema);
+var Location = mongoose.model('Location', citySchema, "Locations");
 
-module.exports = mongoose.model('Location');
+module.exports = {Location: Location};

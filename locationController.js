@@ -2,10 +2,15 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var app = express();
+var request = require('request');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
-var Location = require('./location');
+var locationRequire = require('./location');
+
+var Location = locationRequire.Location;
 
 /** 
 Array where I store the latitude and longitude for each city
@@ -47,15 +52,51 @@ for each city in the array areas.
 
 **/
 
-router.all('/', function(req, res) {
+
 
  function updateWeatherStore(areas){
 
+ 	function removeMilitary(hours){
+
+        if (hours > 0 && hours <= 12) {
+            hours = "" + hours;
+        } else if (hours > 12) {
+            hours = "" + (hours - 12);
+        } else if (hours === 0) {
+            hours= "12";
+        }
+        return hours;
+    }
+
+ 	function  timeConverter(tempTime) {
+        var time = tempTime;
+        var d = new Date(time);
+        var hours = d.getHours();
+        if (hours>=12){                 
+                var suffix = "P.M.";}
+            else{
+                suffix = "A.M.";}
+        var minutes = (d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes();
+
+        hours = removeMilitary(hours);
+
+        var formattedTime = hours + ":" + minutes + " " + suffix;
+        var formattedDate = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
+
+
+        return formattedDate + " / " + formattedTime;
+    }
+	console.log("\x1b[32m", timeConverter(Date.now()) + ':')
+ 	console.log("\x1b[0m", "Calling API and Updating Database.");
+ 	
 
 	var max = areas.length;
 
 	for(i = 0; i < max; i++){
 		var temp = areas[i];
+		var count = i + 1
+
+		// console.log('for loop initiated');
 
 		/**
 		Calls the API uses the lat and long stored in areas[i].
@@ -67,21 +108,27 @@ router.all('/', function(req, res) {
 
 		function getWeatherData(temp) {
 			
+			// console.log('getWeatherData started')
 			
 			var lat = temp.lat;
 			var long = temp.long;
 
-			var request = `https://api.darksky.net/forecast/926bb6de03f1ae8575d48aaeb2fc9b83/${lat},${long}`
+			
+
+			// console.log( lat + " " + long);
+
+			var url = `https://api.darksky.net/forecast/${key}/${lat},${long}`
 		
-			router.get(request, function (req, res) {
-				var weatherData = " ";
+			// console.log(url)
+			request({url: url, json: true}, function (err, res, body) {
+				if(!err && res.statusCode === 200) {
+					var weatherData = body
+					// console.log(body)
+					// console.log(weatherData.daily.data)
 
-				res.on('data', function(data) {
-					weatherData = data;
-
-					console.log("Weather Data: " + data)
-				})
-				updateDB(weatherData, temp);
+					updateDB(weatherData, temp);
+					
+				}
 			});
 		}	
 
@@ -97,50 +144,29 @@ router.all('/', function(req, res) {
 		**/
 		function updateDB(weatherData, temp) {
 			
-			var city = temp.city;
+			// console.log("updateDB started");
 
-			
-			Location.find({ location: temp.city }, function(err, location) {
-			  if (err) throw err;
+			var cityStore = temp.city;
+			var tempData = weatherData;
 
-			  location.data = weatherData;
-
-			  location.save(function(err) {
-			  	if (err) throw err;
-
-			  	console.log(temp.city + ' updated!');
-			  })
-			  // object of the location
-			  console.log(location);
+			Location.findOneAndUpdate({ city: `${cityStore}` }, {$set: {data: tempData}},function(err, location){
+				if(err){
+					console.log(err);
+				}
+				
+				
 			});
-
 		}
-		// getWeatherData(temp).then(updateDB(weatherData)).then(console.log('Success!'));
-
-		
-
 	}
+	console.log("Success!")
+	console.log("API Calls: " + count)
+
 }
 
-updateWeatherStore(areas);
-
-})
 
 
-// updateWeatherStore(areas);
 
-// console.log("Working-ish")
-// setInterval(function() {
-// 	updateWeatherStore(areas)
-// }, 1800000);
-
-/**
-This will process each client request and send the appropriate data to the client.
-**/
-// router.post('/');
-
-// module.exports = {
-// 	updateWeatherStore: updateWeatherStore(areas),
-// 	areas: areas
-// }
-module.exports = router;
+module.exports = {
+	updateWeatherStore: updateWeatherStore,
+	areas: areas
+}
