@@ -1,5 +1,20 @@
 [![Build Status](https://travis-ci.org/Boka44/weatherServer.svg?branch=master)](https://travis-ci.org/Boka44/weatherServer)
 
+# weatherServer
+
+## weatherServer is live at [https://blooming-earth-34077.herokuapp.com](https://blooming-earth-34077.herokuapp.com)
+
+Server accepts weather requests in the form of 
+
+GET ('.../city/:city', callback)
+replace :city with either sanFran, seattle, portland, or losAngeles.
+
+Example: 
+https://blooming-earth-34077.herokuapp.com/city/sanFran
+
+* Returns JSON with Dark Sky weather API data for San Francisco.
+
+---
 
 The weatherServer will call the Dark Sky API every 30 minutes, receiving up to 20 cities weather data and storing it into my own API using MongoDB. 
 
@@ -10,41 +25,22 @@ Every 30 minutes the server will receive updated weather data and update the API
 Client app will have a unique weather page for each city.
 
 
+## Stack:
 
-Edit: 1/8/2017
+* Node
 
-Success! Server will be deployed on heroku. 
+* Express
 
-Server accepts weather requests in the form of 
+* MongoDB
 
-GET ('.../city/:city', callback)
-replace :city with either sanFran, seattle, portland, or losAngeles.
+* Mongoose
 
-Weather data is updated every 30 minutes.
+## Tests: 
 
-Returns weather data in JSON. Console.log the returned data to view the data.
+* Mocha
 
-Stack:
-	Node
-	Express
-	MongoDB
-	Mongoose
+* Chai
 
-Tests: 
-	Mocha
-	Chai
-	.travis.yml
-	Postman
+* .travis.yml
 
-Dependencies:
-    "body-parser": "^1.18.2",
-    "chai-http": "^3.0.0",
-    "dotenv": "^4.0.0",
-    "express": "^4.16.2",
-    "mongoose": "^5.0.0-rc1",
-    "morgan": "^1.9.0",
-    "request": "^2.83.0",
-    "chai": "^4.1.2",
-    "mocha": "^4.1.0",
-    "nodemon": "^1.14.7"
-
+* Postman
