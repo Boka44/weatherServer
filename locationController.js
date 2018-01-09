@@ -47,6 +47,10 @@ storing it in the database.
 Uses a for loop to call the API and stored the weatherData into the database
 for each city in the array areas.
 
+Logs the date and time of each update into the console.
+For example:
+	1/8/2018 / 6:27 P.M.:
+
 @params {object} areas - passes the city data.
 
 
@@ -124,7 +128,7 @@ for each city in the array areas.
 				if(!err && res.statusCode === 200) {
 					var weatherData = body
 					// console.log(body)
-					console.log(weatherData.daily.data)
+					// console.log(weatherData.daily.data)
 
 					updateDB(weatherData, temp);
 					
