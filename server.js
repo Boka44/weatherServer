@@ -6,12 +6,12 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const { PORT } = require('./config');
 const { areas, updateWeatherStore } = require('./locationController');
 const app = express();
 const db = require('./db');
 const locationRequire = require('./location');
 
+const PORT = process.env.PORT || 8080;
 var Location = locationRequire.Location;
 
 app.use(morgan('common'));
