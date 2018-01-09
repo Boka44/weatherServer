@@ -1,29 +1,30 @@
 //server.js
 'use strict';
 
+require('dotenv').config()
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-// const weatherRouter = require('./routers/v1/weather-router');
 const { PORT } = require('./config');
 const { areas, updateWeatherStore } = require('./locationController');
 const app = express();
 const db = require('./db');
+const locationRequire = require('./location');
 
-
-
-var locationRequire = require('./location');
 var Location = locationRequire.Location;
 
 app.use(morgan('common'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json()); 
 
-// app.use('/api/v1', weatherRouter);
+/**
+Receives a GET request then process the city received with what we have in the database.
+Sends back the appropriate weather data. 
+**/
+
 app.route('/city/:city');
 app.get('/city/:city', (req, res)=>{
-  // connect to database and get city from database
   
   Location.findOne({ city: `${req.params.city}` }, 'city data',  (err, location) => {
     if(err){
@@ -34,15 +35,32 @@ app.get('/city/:city', (req, res)=>{
   })
 
 });
+
+/**
+Test ran by a 49er faithful.
+**/
+
 app.get('/', function(req, res) {
-  res.send("Gold-blooded")
+  res.send("Niners Super Bowl 2019")
 })
+
+/**
+Calls the first time the server is ran
+**/
     
 updateWeatherStore(areas);
+
+/**
+Calls updateWeatherStore every 30 minutes
+**/
 
 setInterval(function() {
 	updateWeatherStore(areas)
 }, 1800000);
+
+/**
+Handles errors
+**/
 
 app.use(function(req, res, next){
   var err = new Error('Not Found');

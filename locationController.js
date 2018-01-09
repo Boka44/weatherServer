@@ -1,10 +1,10 @@
 //locationController.js
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-var app = express();
-var request = require('request');
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+const app = express();
+const request = require('request');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
@@ -112,19 +112,19 @@ for each city in the array areas.
 			
 			var lat = temp.lat;
 			var long = temp.long;
-
+			var API_KEY = process.env.API_KEY;
 			
 
 			// console.log( lat + " " + long);
 
-			var url = `https://api.darksky.net/forecast/${key}/${lat},${long}`
+			var url = `https://api.darksky.net/forecast/${API_KEY}/${lat},${long}`
 		
 			// console.log(url)
 			request({url: url, json: true}, function (err, res, body) {
 				if(!err && res.statusCode === 200) {
 					var weatherData = body
 					// console.log(body)
-					// console.log(weatherData.daily.data)
+					console.log(weatherData.daily.data)
 
 					updateDB(weatherData, temp);
 					
@@ -137,10 +137,10 @@ for each city in the array areas.
 		
 		
 		/**
-		This will update each city in teh database with the appropriate weather data.
+		This will update each city in thh database with the appropriate weather data.
 
 		@params {object} res- passes the Dark Sy API data 
-		@params {string} temp - 
+		@params {string} temp - holds the current city data
 		**/
 		function updateDB(weatherData, temp) {
 			

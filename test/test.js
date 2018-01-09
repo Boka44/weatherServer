@@ -1,9 +1,9 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var request = require('request')
-var assert = chai.assert;
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const request = require('request')
+const assert = chai.assert;
 
-var should = chai.should();
+const should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -20,9 +20,7 @@ describe('GET', function() {
 		.end(function(err, res) {
 			res.body.should.be.json;
 			res.body.should.be.a('object');
-			res.body.should.have.property('city').eql(cityName);
 			res.body.should.have.property('data');
-			res.body.should.have.property('test');
 			
 		})
 		
