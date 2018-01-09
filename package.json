@@ -4,7 +4,7 @@
   "description": "Middleware for weather app API call",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "author": "Boka",
   "license": "ISC",
