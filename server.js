@@ -30,7 +30,10 @@ app.get('/city/:city', (req, res)=>{
     if(err){
       res.status(200).send(err);
     } 
-    console.log(location.data)
+    // console.log(location.data)
+    res.set({
+      'Access-Control-Allow-Origin': '*'
+    })
     res.send(location.data)
   })
 
