@@ -12,11 +12,6 @@ const db = require('./db');
 const locationRequire = require('./location');
 const https = require('https')
 
-//Keeps the server awake
-
-setInterval( function() {
-  https.get('https://blooming-earth-34077.herokuapp.com/')
-}, 300000)
 
 const PORT = process.env.PORT || 8080;
 var Location = locationRequire.Location;
